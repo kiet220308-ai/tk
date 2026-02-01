@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nhật Ký Quê Nhà</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET NHẸ ===== */
+body{
+    margin:0;
+    font-family:'Roboto',sans-serif;
+    background:#f4ebd0;
+    color:#2f3a36;
+}
+h1,h2,h3{
+    font-family:'Playfair Display',serif;
+}
+h1{color:#ffcc33;}
+h2,h3{color:#5c4b2a;}
+/* ===== TOP NAV ===== */
+/* ===== NAVBAR ===== */
+.top-nav{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:56px;
+    background:#111;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    z-index:9999;
+}
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-right:30px;
+}
+
+.logo-box{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#111;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 0 2px rgba(212,175,55,.5);
+}
+
+.nav-logo-text{
+    font-family:'Playfair Display',serif;
+    font-size:15px;
+    letter-spacing:1px;
+    color:#d4af37;
+    white-space:nowrap;
+}
+
+.nav-menu{
+    list-style:none;
+    display:flex;
+    gap:22px;
+    margin:0;
+    padding:0;
+    flex:1;
+}
+
+.nav-menu a{
+    color:#fff;
+    text-decoration:none;
+    font-size:14px;
+    opacity:.7;
+}
+.nav-menu a:hover{opacity:1}
+
+.nav-search{color:#fff;cursor:pointer}
+/* ===== MAIN ===== */
+main{padding-top:52px;}
+section{padding:80px 20px;}
+
+/* ===== HERO ===== */
+.hero{
+    text-align:center;
+    padding:140px 20px;
+    color:white;
+    background:
+      linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+      url('https://i.postimg.cc/c4LPNk3r/af25da192f6a9faa8b20f683d1193cef.jpg') center/cover;
+}
+.hero h1{font-size:3.5rem;}
+.hero p{
+    max-width:700px;
+    margin:auto;
+    font-style:italic;
+}
+
+/* ===== SO SÁNH ẢNH ===== */
+.compare-box{
+    position:relative;
+    max-width:800px;
+    height:550px;
+    margin:40px auto;
+    overflow:hidden;
+}
+.compare-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    pointer-events:none;
+    user-select:none;
+}
+
+/* Lớp ảnh phủ */
+.compare-overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    width:50%;
+    height:100%;
+    overflow:hidden;
+    transition:width .05s linear;
+}
+
+/* Thanh kéo */
+.compare-slider{
+    position:absolute;
+    top:0;
+    left:50%;
+    width:4px;
+    height:100%;
+    background:#f1c40f;
+    transform:translateX(-50%);
+    pointer-events:none;
+}
+.compare-slider::after{
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:18px;
+    height:18px;
+    background:#f1c40f;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 0 4px rgba(0,0,0,.4);
+}
+
+/* ===== FOOTER ===== */
+footer{
+    text-align:center;
+    padding:30px 10px;
+    color:#777;
+    font-size:14px;
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+    .hero h1{font-size:2.4rem;}
+    section{padding:60px 16px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav class="top-nav">
+    <div class="nav-left">
+        <div class="logo-box">
+            <svg width="22" height="22" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+                      fill="#d4af37"/>
+                <circle cx="12" cy="9" r="3" fill="#111"/>
+            </svg>
+        </div>
+        <div class="nav-logo-text">KHÔNG GIAN KÝ ỨC</div>
+    </div>
+
+    <ul class="nav-menu">
+        <li><a href="#home">Trang chủ</a></li>
+        <li><a href="#">Câu chuyện</a></li>
+        <li><a href="#">Bảo tàng số</a></li>
+        <li><a href="#">Ký ức địa phương</a></li>
+    </ul>
+
+    <div class="nav-search">🔍</div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <h1>KHÔNG GIAN KÝ ỨC</h1>
+    <p>Ký ức không mất đi – chúng chỉ đang chờ được kể lại.</p>
+</section>
+
+<!-- SO SÁNH ẢNH -->
+<section>
+    <h2 style="text-align:center">Quê nhà – Ngày ấy &amp; Bây giờ</h2>
+
+    <div class="compare-box" id="compare">
+      <div class="compare-box" id="compare">
+    <img src="https://static1.cafeland.vn/cafelandnew/hinh-anh/2025/02/24/53/image-20250224104604-1.jpeg" style="display: block; width: 100%;">
+
+    <div class="compare-overlay" id="overlay" style="position: absolute; top: 0; left: 0; height: 110%; border-right: 2px solid #f1c40f; overflow: hidden;">
+        <img src="https://www.dulichvtv.com/wp-content/uploads/2025/07/ban-do-34-tinh-Viet-Nam-1506x1536.jpg" 
+             style="width: 800px; height:550px; object-fit: cover;">
+    </div>
+    
+    <div class="compare-slider" id="slider"></div>
+</div>
+        
+    <p style="text-align:center;font-style:italic;">
+        Di chuột hoặc vuốt để thấy thời gian đổi thay
+    </p>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+    @DESIGN BY - NGUYỄN THỊ MỸ QUYÊN-
+</footer>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+const box = document.getElementById('compare');
+const overlay = document.getElementById('overlay');
+const slider = document.getElementById('slider');
+
+function updateCompare(x){
+    const r = box.getBoundingClientRect();
+    let percent = (x - r.left) / r.width * 100;
+    percent = Math.max(0, Math.min(100, percent));
+    overlay.style.width = percent + '%';
+    slider.style.left = percent + '%';
+}
+
+box.addEventListener('mousemove', e => updateCompare(e.clientX));
+box.addEventListener('touchmove', e => updateCompare(e.touches[0].clientX));
+</script>
+
+</body>
+</html> 

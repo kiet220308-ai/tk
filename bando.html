@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trạm Ký Ức – Bản Đồ Ký Ức</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+:root{
+    --paper:#f4eee0;
+    --ink:#4a3f35;
+    --accent:#8c6a5a;
+    --border:#d1bfa7;
+}
+
+body{
+    margin:0;
+    font-family:"Lora",serif;
+    background:var(--paper);
+    color:var(--ink);
+}
+
+/* ===== HEADER ===== */
+header{
+    text-align:center;
+    padding:18px;
+    border-bottom:1px solid var(--border);
+}
+
+/* ===== NOTE ===== */
+.timeline-note{
+    padding:10px 16px;
+    font-size:20px;
+    font-style:italic;
+    color:#4a3f35;
+    background:#fff9ee;
+    border-left:4px solid var(--accent);
+    border-bottom:1px dashed var(--border);
+}
+
+/* ===== TIMELINE ===== */
+#timeline{
+    display:flex;
+    gap:10px;
+    padding:10px;
+    overflow-x:auto;
+    border-bottom:1px dashed var(--border);
+}
+.timeline-item{
+    background:#fff8ec;
+    padding:6px 14px;
+    border-radius:20px;
+    cursor:pointer;
+    border:1px solid var(--border);
+    white-space:nowrap;
+    font-size:14px;
+}
+
+/* ===== MAP ===== */
+#map{
+    height:65vh;
+}
+
+/* ===== DRAWER BUTTON ===== */
+#openForm{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:var(--accent);
+    color:#fff;
+    padding:12px 16px;
+    border-radius:30px;
+    cursor:pointer;
+    z-index:999;
+}
+
+/* ===== DRAWER ===== */
+#drawer{
+    position:fixed;
+    bottom:-100%;
+    left:0;
+    width:100%;
+    background:var(--paper);
+    border-top:2px solid var(--border);
+    transition:.4s;
+    z-index:998;
+}
+#drawer.active{ bottom:0; }
+
+#drawer form{
+    padding:16px;
+    display:grid;
+    gap:10px;
+}
+
+input,textarea,button{
+    padding:10px;
+    font-size:14px;
+    border:1px solid var(--border);
+    background:#fffdf7;
+}
+
+button{
+    background:var(--accent);
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+/* ===== DESKTOP ===== */
+@media(min-width:900px){
+    #drawer{
+        position:static;
+        border:none;
+    }
+    #openForm{ display:none; }
+}
+/* ================= FOOTER ================= */
+footer{
+    background:#222;
+    color:#aaa;
+    text-align:center;
+    padding:40px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>🗺️ TRẠM KÝ ỨC</h2>
+    <p>Ký ức nằm dưới từng bước chân</p>
+</header>
+
+<div class="timeline-note">
+    📜MỘT SỐ ĐỊA ĐIỂM NỔI TIẾNG
+</div>
+
+<div id="timeline"></div>
+<div id="map"></div>
+<div class="timeline-note">
+     CHỌN NƠI KÝ ỨC BẠN THUỘC VỀ
+</div>
+<div id="openForm">✍️ Thêm ký ức</div>
+
+<section id="drawer">
+<form id="memoryForm">
+    <input id="title" placeholder="Tên địa điểm" required>
+    <input id="year" placeholder="Mốc thời gian" required>
+    <textarea id="text" placeholder="Câu chuyện ký ức" required></textarea>
+    <input id="lat" type="number" step="any" placeholder="Vĩ độ" required>
+    <input id="lng" type="number" step="any" placeholder="Kinh độ" required>
+    <button>Lưu ký ức</button>
+</form>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ===== MAP INIT ===== */
+const map=L.map('map').setView([10.5,105.7],6);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+ attribution:'© OpenStreetMap'
+}).addTo(map);
+
+const icon=L.icon({
+ iconUrl:'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+ iconSize:[30,30],
+ iconAnchor:[15,30]
+});
+const selectIcon = L.icon({
+ iconUrl:'https://cdn-icons-png.flaticon.com/512/684/684809.png',
+ iconSize:[26,26],
+ iconAnchor:[13,26],
+ popupAnchor:[0,-20]
+});
+
+/* ===== DATA INIT ===== */
+let memories = JSON.parse(localStorage.getItem("memories"));
+
+if(!memories || memories.length===0){
+ memories=[
+  {id:1,title:"Văn Miếu – Quốc Tử Giám",year:"1070",text:"Trường đại học đầu tiên của Việt Nam.",lat:21.0287,lng:105.8350},
+  {id:2,title:"Hoàng thành Thăng Long",year:"1010",text:"Trung tâm quyền lực ngàn năm.",lat:21.0356,lng:105.8395},
+  {id:3,title:"Cố đô Huế",year:"1802–1945",text:"Kinh đô triều Nguyễn.",lat:16.4637,lng:107.5909},
+  {id:4,title:"Phố cổ Hội An",year:"Thế kỷ XVI",text:"Thương cảng cổ Đông – Tây.",lat:15.8801,lng:108.3380},
+  {id:5,title:"Địa đạo Củ Chi",year:"1960–1975",text:"Hệ thống địa đạo kháng chiến.",lat:11.1426,lng:106.4620},
+  {id:6,title:"Nhà tù Côn Đảo",year:"1862",text:"Chứng tích lịch sử.",lat:8.6846,lng:106.6083},
+  {id:7,title:"Dinh Độc Lập",year:"1975",text:"Dấu mốc thống nhất đất nước.",lat:10.7769,lng:106.6953}
+ ];
+ localStorage.setItem("memories",JSON.stringify(memories));
+}
+
+let editingId=null;
+let tempMarker = null;
+
+/* ===== SAVE ===== */
+function save(){
+ localStorage.setItem("memories",JSON.stringify(memories));
+}
+
+/* ===== TIMELINE ===== */
+function renderTimeline(){
+ timeline.innerHTML="";
+ [...new Set(memories.map(m=>m.year))].sort().forEach(y=>{
+  const t=document.createElement("div");
+  t.className="timeline-item";
+  t.textContent=y;
+  t.onclick=()=>{
+   const m=memories.find(x=>x.year===y);
+   map.setView([m.lat,m.lng],14);
+   m.marker.openPopup();
+  };
+  timeline.appendChild(t);
+ });
+}
+
+/* ===== MARKER ===== */
+function addMarker(m){
+ m.marker=L.marker([m.lat,m.lng],{icon}).addTo(map)
+ .bindPopup(`
+  <b>${m.title}</b><br>
+  <small>${m.year}</small>
+  <p>${m.text}</p>
+  <button onclick="editMemory(${m.id})">✏️ Sửa</button>
+  <button onclick="deleteMemory(${m.id})">🗑️ Xóa</button>
+ `);
+}
+
+/* ===== RENDER ===== */
+memories.forEach(addMarker);
+renderTimeline();
+
+/* ===== CLICK MAP ===== */
+map.on("click",e=>{
+ lat.value = e.latlng.lat.toFixed(6);
+ lng.value = e.latlng.lng.toFixed(6);
+
+ if(tempMarker) map.removeLayer(tempMarker);
+
+ tempMarker = L.marker(e.latlng,{
+  icon: selectIcon,
+  opacity: 0.8
+ }).addTo(map)
+ .bindPopup("📍 Vị trí đang chọn")
+ .openPopup();
+});
+
+/* ===== FORM SUBMIT ===== */
+memoryForm.onsubmit=e=>{
+ e.preventDefault();
+
+ if(editingId){
+  const m=memories.find(x=>x.id===editingId);
+  map.removeLayer(m.marker);
+  m.title=title.value;
+  m.year=year.value;
+  m.text=text.value;
+  m.lat=+lat.value;
+  m.lng=+lng.value;
+  addMarker(m);
+  editingId=null;
+ }else{
+  const m={
+   id:Date.now(),
+   title:title.value,
+   year:year.value,
+   text:text.value,
+   lat:+lat.value,
+   lng:+lng.value
+  };
+  memories.push(m);
+  addMarker(m);
+ }
+
+ save();
+ renderTimeline();
+ drawer.classList.remove("active");
+ e.target.reset();
+};
+if(tempMarker){
+ map.removeLayer(tempMarker);
+ tempMarker = null;
+}
+
+/* ===== EDIT ===== */
+function editMemory(id){
+ const m=memories.find(x=>x.id===id);
+ editingId=id;
+ title.value=m.title;
+ year.value=m.year;
+ text.value=m.text;
+ lat.value=m.lat;
+ lng.value=m.lng;
+ drawer.classList.add("active");
+}
+
+/* ===== DELETE ===== */
+function deleteMemory(id){
+ if(!confirm("Xóa ký ức này?")) return;
+ const i=memories.findIndex(x=>x.id===id);
+ map.removeLayer(memories[i].marker);
+ memories.splice(i,1);
+ save();
+ renderTimeline();
+}
+
+/* ===== DRAWER TOGGLE ===== */
+openForm.onclick=()=>{
+ editingId=null;
+ memoryForm.reset();
+ drawer.classList.toggle("active");
+};
+</script>
+<!-- FOOTER -->
+<footer>
+    @DESIGN BY -TRẦN ANH KIỆT-
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Việt Nam: Xưa & Nay</title>
+
+<style>
+:root{
+    --bg:#f4eee0;
+    --text:#4a3f35;
+    --accent:#8c6a5a;
+    --border:#d1bfa7;
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:"Times New Roman",serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+}
+
+/* ===== HEADER ===== */
+header{
+    text-align:center;
+    padding:30px 20px;
+    border-bottom:2px double var(--accent);
+}
+
+header h1{margin:0;font-size:2rem}
+header p{margin-top:10px;font-style:italic}
+
+/* ===== DEDICATION ===== */
+.dedication{
+    max-width:800px;
+    margin:40px auto;
+    padding:25px;
+    background:#fffaf2;
+    border:1px solid var(--border);
+    font-style:italic;
+}
+
+.dedication .signature{
+    text-align:right;
+    margin-top:20px;
+    font-weight:bold;
+}
+
+/* ===== DESTINATION ===== */
+.destination{
+    max-width:900px;
+    margin:50px auto;
+    background:#fffdf9;
+    padding:20px;
+    border:1px solid var(--border);
+}
+
+.destination h2{
+    color:var(--accent);
+    border-left:5px solid var(--accent);
+    padding-left:12px;
+    letter-spacing:2px;
+    margin-top:0;
+}
+
+/* ===== SLIDER ===== */
+.compare{
+    position:relative;
+    width:100%;
+    height:300px;
+    overflow:hidden;
+    margin:20px 0;
+    cursor:ew-resize;
+    touch-action:none;
+}
+
+/* TOOLTIP */
+.compare::before{
+    content:"Di chuột để so sánh – Click để reset";
+    position:absolute;
+    bottom:12px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(255,255,255,0.85);
+    color:#333;
+    font-size:0.75rem;
+    padding:6px 12px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s ease;
+    z-index:5;
+}
+
+.compare:hover::before{
+    opacity:1;
+}
+
+.compare img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    user-select:none;
+    -webkit-user-drag:none;
+    pointer-events:none;
+}
+
+.compare .before{
+    clip-path: inset(0 50% 0 0);
+    filter:sepia(.6) grayscale(.3);
+    z-index:2;
+}
+
+.compare .after{z-index:1}
+
+.slider{
+    position:absolute;
+    top:0;
+    left:50%;
+    width:3px;
+    height:100%;
+    background:white;
+    z-index:3;
+}
+
+.slider::after{
+    content:"⇆";
+    position:absolute;
+    top:50%;
+    left:-12px;
+    transform:translateY(-50%);
+    background:#fff;
+    color:#333;
+    padding:4px 6px;
+    border-radius:50%;
+    font-size:12px;
+}
+
+/* ===== IMAGE SOURCE ===== */
+.image-source{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.8rem;
+    font-style:italic;
+    color:#6f6258;
+    margin-top:6px;
+}
+
+/* ===== INFO ===== */
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:15px;
+}
+
+.info-box h3{
+    margin:0 0 5px;
+    color:#6d4c41;
+    border-bottom:1px dashed var(--accent);
+}
+
+/* ===== DESKTOP ===== */
+@media(min-width:768px){
+    header h1{font-size:2.5rem}
+    .compare{height:420px}
+    .info-grid{grid-template-columns:repeat(3,1fr)}
+}
+.image-source a{
+    color:#6f6258;
+    text-decoration:none;
+}
+
+.image-source a:hover{
+    color:#8c6a5a;
+    text-decoration:underline;
+}
+
+.link-icon{
+    font-size:0.75em;
+    margin-left:4px;
+    opacity:0.6;
+}
+
+.image-source a:hover .link-icon{
+    opacity:1;
+}
+/* ===== FOOTER ===== */
+footer{
+    text-align:center;
+    padding:30px 10px;
+    color:#777;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>DI SẢN VIỆT NAM</h1>
+    <p>Hành trình qua dòng thời gian: Xưa & Nay</p>
+</header>
+
+<section class="dedication">
+    <p>
+        Trang web này không chỉ là những bức ảnh đặt cạnh nhau để so sánh xưa và nay.
+        Đó là nơi ký ức được giữ lại, giữa những đổi thay không thể quay đầu.Chúng tôi tin rằng, hiểu về quá khứ không phải để tiếc nuối, mà để trân trọng hơn những gì đang hiện hữu. Hy vọng khi lật mở từng trang ảnh tại đây, bạn sẽ tìm thấy một mẩu ký ức của riêng mình, hay đơn giản là một lần được chạm tay vào dòng chảy lặng lẽ của lịch sử Việt Nam.
+    </p>
+    <div class="signature">— Viết cho Quê Mình</div>
+</section>
+
+<section class="destination">
+<h2>1 Làng Hoa Sa Đéc (Đồng Tháp).</h2>
+
+<div class="compare">
+    <img src="https://photo.znews.vn/w660/Uploaded/Jac_Huo/2017_01_13/SadecXua_zing_25.jpg"
+         class="before" alt="Sa Đéc xưa">
+    <img src="https://bcp.cdnchinhphu.vn/334894974524682240/2025/9/11/z7000924331286a1d59aacecdb9e9dd069934e7036d131-17575842804301899991059.jpg"
+         class="after" alt="Sa Đéc nay">
+    <div class="slider"></div>
+</div>
+<div class="image-source">
+    <span>
+        Ảnh xưa:
+        <a href="https://zingnews.vn/lang-hoa-sa-dec-post716176.html"
+           target="_blank" rel="noopener">
+            Zing News <span class="link-icon">🔗</span>
+        </a>
+    </span>
+    <span>
+        Ảnh nay:
+        <a href="https://baochinhphu.vn/lang-hoa-sa-dec-102250911154123.htm"
+           target="_blank" rel="noopener">
+            Cổng TTĐT Chính phủ <span class="link-icon">🔗</span>
+        </a>
+    </span>
+</div>
+
+<div class="info-grid">
+    <div class="info-box"><h3>🏛 Kiến Trúc</h3><p>Nhà cổ Huỳnh Thủy Lê – biểu tượng của sự giao thoa kiến trúc Đông - Tây độc đáo.</p></div>
+    <div class="info-box"><h3>🍲 Ẩm Thực</h3><p>Hủ tiếu Sa Đéc trứ danh với sợi bánh dai đặc trưng và nước dùng ngọt thanh.</p></div>
+    <div class="info-box"><h3>🎊 Lễ Hội</h3><p>Festival Hoa Sa Đéc – nơi tôn vinh những đôi tay nghệ nhân với truyền thống trồng hoa trăm năm.</p></div>
+</div>
+</section>
+
+<section class="destination">
+<h2>2 Đảo Ngọc Phú Quốc (Kiên Giang)</h2>
+<div class="compare">
+    <img src="https://vpq.vn/uploads/Phu-quoc-ngay-xua%20(12).webp"
+         class="before" alt="Phú Quốc xưa">
+    <img src="https://media.vneconomy.vn/images/upload/2023/08/31/xahoi-cdn-congly-vn-news-2022-06-25-1656141167-pq-1-1611472998875.jpg"
+         class="after" alt="Phú Quốc nay">
+    <div class="slider"></div>
+</div>
+
+<div class="image-source">
+    <span>
+        Ảnh xưa:
+        <a href="https://vpq.vn/phu-quoc-ngay-xua-krygeuxc.html"
+           target="_blank" rel="noopener">
+            Phú Quốc ngày xưa thế nào? <span class="link-icon">🔗</span>
+        </a>
+    </span>
+
+    <span>
+        Ảnh nay:
+        <a href="https://vneconomy.vn/phat-trien-phu-quoc-la-do-thi-bien-dao-doc-dao.htm"
+           target="_blank" rel="noopener">
+           vneconomy.vn <span class="link-icon">🔗</span>
+        </a>
+    </span>
+</div>
+
+<div class="info-grid">
+    <div class="info-box"><h3>🏛 Kiến Trúc</h3><p>Sự đối lập thú vị giữa vẻ mộc mạc của làng chài Hàm Ninh và các khu nghỉ dưỡng hiện đại, sang trọng.</p></div>
+    <div class="info-box"><h3>🍲 Ẩm Thực</h3><p>Gỏi cá trích, bún quậy và nước mắm Phú Quốc nồng nàn nổi tiếng thế giới.</p></div>
+    <div class="info-box"><h3>🎊 Lễ Hội</h3><p>Lễ hội Nghinh Ông – nét đẹp tâm linh cầu mong sóng yên biển lặng của ngư dân vùng biển.</p></div>
+</div>
+</section>
+<section class="destination">
+<h2>3 Sa Pa (Lào Cai)</h2>
+
+<div class="compare">
+    <img src="https://langviet.vn/wp-content/uploads/2023/06/P1-768x512.jpg"
+         class="before" alt="Sa Pa xưa">
+    <img src="https://langviet.vn/wp-content/uploads/2023/06/P4-768x511.jpg"
+         class="after" alt="Sa Pa nay">
+    <div class="slider"></div>
+</div>
+
+<div class="image-source">
+    <span>
+        Ảnh xưa:
+        <a href="https://langviet.vn/nguoc-dong-thoi-gian-ngam-nhin-danh-lam-thang-canh-xua-cua-viet-nam/.html"
+           target="_blank" rel="noopener">
+            langviet.vn <span class="link-icon">🔗</span>
+        </a>
+    </span>
+
+    <span>
+        Ảnh nay:
+        <a href="https://langviet.vn/nguoc-dong-thoi-gian-ngam-nhin-danh-lam-thang-canh-xua-cua-viet-nam/.html"
+           target="_blank" rel="noopener">
+            langvie.vn <span class="link-icon">🔗</span>
+        </a>
+    </span>
+</div>
+
+<div class="info-grid">
+    <div class="info-box"><h3>🏛 Kiến Trúc</h3><p>Sự kết hợp độc đáo giữa nhà sàn truyền thống của người H'Mông và các biệt thự kiểu Pháp cổ.</p></div>
+    <div class="info-box"><h3>🍲 Ẩm Thực</h3><p> Thắng cố, lợn cắp nách và đặc sản cá hồi xứ lạnh.</p></div>
+    <div class="info-box"><h3>🎊 Lễ Hội</h3><p>Chợ tình Sa Pa – nét văn hóa giao duyên đặc sắc và giàu bản sắc của đồng bào vùng cao.</p></div>
+</div>
+</section>
+<section class="destination">
+<h2>4 Kinh Thành Huế (Thừa Thiên Huế)</h2>
+
+<div class="compare">
+    <img src="https://photo.znews.vn/w660/Uploaded/dqmblcvo/2024_08_13/A8.1_1.jpg"
+         class="before" alt="Kinh Thành Huế xưa">
+    <img src="https://mia.vn/media/uploads/blog-du-lich/di-tich-lich-su-1-1731597444.jpg"
+         class="after" alt="Kinh Thành Huế nay">
+    <div class="slider"></div>
+</div>
+
+<div class="image-source">
+    <span>
+        Ảnh xưa:
+        <a href="https://znews.vn/hoang-thanh-hue-100-nam-truoc-va-nay-qua-anh-cung-goc-chup-post1491673.html"
+           target="_blank" rel="noopener">
+            ZNews <span class="link-icon">🔗</span>
+        </a>
+    </span>
+
+    <span>
+        Ảnh nay:
+        <a href="https://mia.vn/cam-nang-du-lich/di-tich-lich-su-noi-tieng-17292.html"
+           target="_blank" rel="noopener">
+          cam-nang-du-lich<span class="link-icon">🔗</span>
+        </a>
+    </span>
+</div>
+
+<div class="info-grid">
+    <div class="info-box"><h3>🏛 Kiến Trúc</h3><p>Hệ thống cung điện, lăng tẩm uy nghi được xây dựng nghiêm ngặt theo phong thủy phương Đông.</p></div>
+    <div class="info-box"><h3>🍲 Ẩm Thực</h3><p> Bún bò Huế, cơm hến và các loại bánh cung đình tinh tế, cầu kỳ.</p></div>
+    <div class="info-box"><h3>🎊 Lễ Hội</h3><p> Festival Huế với Nhã nhạc cung đình – Kiệt tác di sản phi vật thể của nhân loại.</p></div>
+</div>
+</section>
+<section class="destination">
+<h2>5 Phố Cổ Hội An (Quảng Nam)</h2>
+
+<div class="compare">
+    <img src="https://www.bambooairways.com/documents/d/global/pho-co-hoi-xua"
+         class="before" alt="Phố Cổ Hội An xưa">
+    <img src="https://mia.vn/media/uploads/blog-du-lich/di-tich-lich-su-5-1731597443.jpg"
+         class="after" alt="Phố Cổ Hội An nay">
+    <div class="slider"></div>
+</div>
+
+<div class="image-source">
+    <span>
+        Ảnh xưa:
+        <a href="https://www.bambooairways.com/vi/travel-guide/domestic-travels/quang-nam/kham-pha-pho-co-hoi-an-qua-goc-nhin-lich-su.html "
+           target="_blank" rel="noopener">
+            travel-guide <span class="link-icon">🔗</span>
+        </a>
+    </span>
+
+    <span>
+        Ảnh nay:
+        <a href="https://mia.vn/cam-nang-du-lich/di-tich-lich-su-noi-tieng-17292.htm"
+           target="_blank" rel="noopener">
+            cam-nang-du-lich<span class="link-icon">🔗</span>
+        </a>
+    </span>
+</div>
+
+<div class="info-grid">
+    <div class="info-box"><h3>🏛 Kiến Trúc</h3><p>Những mái ngói âm dương, tường vàng đặc trưng và biểu tượng Chùa Cầu cổ kính.</p></div>
+    <div class="info-box"><h3>🍲 Ẩm Thực</h3><p> Cao lầu, cơm gà Bà Buội và hương vị đậm đà từ nước mắm làng chài Cửa Đại.</p></div>
+    <div class="info-box"><h3>🎊 Lễ Hội</h3><p>Đêm rằm phố cổ – không gian lung linh với hàng ngàn đèn lồng rực rỡ bên dòng sông Hoài.</p></div>
+</div>
+</section>
+<script>
+document.querySelectorAll(".compare").forEach(box => {
+    const before = box.querySelector(".before");
+    const slider = box.querySelector(".slider");
+
+    function setPos(percent){
+        slider.style.left = percent + "%";
+        before.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    }
+
+    function move(x){
+        const rect = box.getBoundingClientRect();
+        let pos = ((x - rect.left) / rect.width) * 100;
+        pos = Math.max(0, Math.min(100, pos));
+        setPos(pos);
+    }
+
+    box.addEventListener("mousemove", e => move(e.clientX));
+    box.addEventListener("click", () => setPos(50));
+    box.addEventListener("dblclick", () => setPos(50));
+
+    box.addEventListener("touchstart", e => move(e.touches[0].clientX), {passive:true});
+    box.addEventListener("touchmove", e => move(e.touches[0].clientX), {passive:true});
+
+    setPos(50);
+});
+</script>
+<!-- FOOTER -->
+<footer>
+    @DESIGN BY - NGUYỄN THỊ KIM THOA-
+</footer>
+
+</body>
+</html>

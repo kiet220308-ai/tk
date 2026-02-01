@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bảo Tàng Số</title>
+
+<style>
+/* ========== ROOT ========== */
+:root{
+  --gold:#c9a44c;
+  --dark:#0f0f0f;
+}
+
+/* ========== RESET ========== */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Roboto, Arial, sans-serif;
+  background:#f8f5e6;
+}
+
+/* ================= INTRO ================= */
+.museum-intro{
+  position:fixed;
+  inset:0;
+  background:#000;
+  z-index:3000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.museum-intro .door{
+  position:absolute;
+  top:0;
+  width:50%;
+  height:100%;
+  background:#111;
+  transition:1.6s ease-in-out;
+}
+.museum-intro .left{left:0;}
+.museum-intro .right{right:0;}
+.museum-intro.open .left{transform:translateX(-100%);}
+.museum-intro.open .right{transform:translateX(100%);}
+.intro-text{
+  color:var(--gold);
+  font-size:32px;
+  letter-spacing:4px;
+  transition:.8s;
+}
+.museum-intro.open .intro-text{opacity:0}
+
+/* ========== MUSEUM ========== */
+.museum{
+  background:var(--dark);
+  color:#fff;
+  padding:60px 20px;
+}
+.museum-title{
+  text-align:center;
+  color:var(--gold);
+  margin-bottom:30px;
+}
+
+/* ========== FILTER ========== */
+.museum-filter{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  padding-bottom:10px;
+  justify-content:center;
+  scroll-snap-type:x mandatory;
+}
+.museum-filter::-webkit-scrollbar{display:none}
+.museum-filter button{
+  scroll-snap-align:start;
+  background:none;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:10px 22px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.museum-filter button.active{
+  background:var(--gold);
+  color:#000;
+}
+
+/* ========== GRID ========== */
+.museum-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:28px;
+  max-width:1200px;
+  margin:40px auto 0;
+}
+
+/* ========== CARD ========== */
+.museum-card{
+  background:#1a1a1a;
+  border-radius:14px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.4s;
+  opacity:0;
+  transform:translateY(20px);
+}
+.museum-card.show{
+  opacity:1;
+  transform:none;
+}
+.museum-card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  filter:grayscale(1);
+  transition:.5s;
+}
+.museum-card h3{
+  padding:14px;
+  margin:0;
+  color:var(--gold);
+}
+.museum-card:hover img{
+  filter:none;
+  transform:scale(1.05);
+}
+
+/* ========== FILTER LOGIC ========== */
+.museum[data-filter]:not([data-filter="all"]) .museum-card{
+  opacity:.15;
+  pointer-events:none;
+  transform:scale(.96);
+}
+.museum[data-filter="phong-tuc"] .museum-card[data-category="phong-tuc"],
+.museum[data-filter="kien-truc"] .museum-card[data-category="kien-truc"],
+.museum[data-filter="le-hoi"] .museum-card[data-category="le-hoi"],
+.museum[data-filter="hien-vat"] .museum-card[data-category="hien-vat"]{
+  opacity:1;
+  pointer-events:auto;
+  transform:none;
+}
+
+/* ========== MODAL ========== */
+.museum-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  place-items:center;
+  z-index:2000;
+}
+.museum-modal.active{display:grid}
+
+.modal-content{
+  background:#111;
+  color:#fff;
+  max-width:820px;
+  width:92%;
+  padding:22px;
+  border-radius:18px;
+  position:relative;
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:20px;
+}
+.modal-media img{
+  width:100%;
+  height:100%;
+  max-height:420px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.modal-text h3{
+  color:var(--gold);
+  margin-top:0;
+}
+.modal-text{
+  max-height:420px;
+  overflow:auto;
+  padding-right:6px;
+}
+
+.modal-text p{
+  line-height:1.6;
+  opacity:.85;
+}
+.close{
+  position:absolute;
+  top:12px;
+  right:16px;
+  cursor:pointer;
+  font-size:22px;
+}
+
+@media(max-width:768px){
+  .modal-content{grid-template-columns:1fr}
+}
+/* ================= FOOTER ================= */
+footer{
+    background:#222;
+    color:#aaa;
+    text-align:center;
+    padding:40px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div class="museum-intro">
+  <div class="door left"></div>
+  <div class="door right"></div>
+  <div class="intro-text">BẢO TÀNG SỐ</div>
+</div>
+
+<section class="museum" data-filter="all">
+<h2 class="museum-title">BẢO TÀNG SỐ</h2>
+
+<div class="museum-filter">
+  <button data-filter-btn="all" class="active">Tất cả</button>
+  <button data-filter-btn="phong-tuc">Phong tục</button>
+  <button data-filter-btn="kien-truc">Kiến trúc</button>
+  <button data-filter-btn="le-hoi">Lễ hội</button>
+  <button data-filter-btn="hien-vat">Hiện vật</button>
+</div>
+
+<div class="museum-grid">
+
+<article class="museum-card"
+ data-category="phong-tuc"
+ data-title="Cưới hỏi xưa"
+ data-desc="Bức ảnh lớn ghi lại quang cảnh một lễ cưới xưa, phản ánh rõ nét phong tục và nếp sống truyền thống của người Việt. Trong không gian kín đáo, các phụ nữ ngồi quây quần, mặc áo dài sẫm màu, đầu vấn khăn, gương mặt nghiêm trang và kín đáo. Cách sắp xếp chỗ ngồi trật tự, dáng vẻ chỉnh tề cho thấy lễ cưới không chỉ là chuyện riêng của đôi lứa mà còn là sự kiện quan trọng của cả gia đình, dòng họ. Bức ảnh gợi lên không khí trang nghiêm, nề nếp và cho thấy quan niệm hôn nhân xưa gắn liền với lễ nghi, đạo lý và truyền thống gia đình."
+ data-img="https://images.spiderum.com/sp-images/c75ff030d3b811eda21c7553c2e60b20.jpeg"
+ data-audio="audio/cuoi-hoi-xua.mp3">
+<img src="https://images.spiderum.com/sp-images/c75ff030d3b811eda21c7553c2e60b20.jpeg">
+<h3>Cưới hỏi xưa</h3>
+</article>
+
+<article class="museum-card"
+ data-category="phong-tuc"
+ data-title="Tết xưa"
+ data-desc="Hình ảnh ghi lại không khí đón Tết Nguyên đán của người Việt xưa, toát lên vẻ ấm áp và trang nghiêm của gia đình truyền thống. Trong sân nhà cổ, người lớn ngồi chỉnh tề, trẻ nhỏ lễ phép đứng chúc Tết, tạo nên khung cảnh đầm ấm, trên dưới thuận hòa. Trang phục áo dài, khăn đóng cùng cách ứng xử kính trên nhường dưới phản ánh rõ nếp sống lễ nghĩa của xã hội xưa. Không gian giản dị nhưng đầy ý nghĩa, cho thấy Tết không chỉ là thời khắc chuyển giao năm mới mà còn là dịp sum họp, gắn kết các thế hệ và gìn giữ những giá trị văn hóa bền vững của dân tộc."
+ data-img="https://visithue.vn/Medias/Nam2022/Thang1/huetourism-chuyen-don-tet-nguyen-dan-cua-nguoi-viet-xua-%E2%80%93-nhung-phong-tuc-tap-quan-co-truyen-qua-hang-ngan-nam-1.jpg">
+<img src="https://visithue.vn/Medias/Nam2022/Thang1/huetourism-chuyen-don-tet-nguyen-dan-cua-nguoi-viet-xua-%E2%80%93-nhung-phong-tuc-tap-quan-co-truyen-qua-hang-ngan-nam-1.jpg">
+<h3>Tết xưa</h3>
+</article>
+
+<article class="museum-card"
+ data-category="kien-truc"
+ data-title="Sài Gòn xưa"
+ data-desc="Ngược dòng thời gian nhìn lại những thay đổi của Sài Gòn xưa.Bức ảnh đặt cạnh nhau hai lát cắt thời gian của Sài Gòn, gợi nên sự chuyển mình bền bỉ của đô thị. Ở khung hình xưa, không gian rộng mở, nhịp sống chậm rãi với xe kéo, hàng cây và những công trình mang đậm dấu ấn kiến trúc Pháp. Sang khung hình nay, các tòa nhà vẫn giữ đường nét cổ điển nhưng khoác lên diện mạo mới: sáng sủa, khang trang, hòa cùng dòng người và xe cộ tấp nập. Sự đối sánh ấy cho thấy Sài Gòn đổi thay mà không đánh mất ký ức, vừa hiện đại vừa trân trọng quá khứ."
+ data-img="https://1phutsaigon.vn/wp-content/uploads/2022/07/tc3jjope-7-1_05.jpg">
+<img src="https://1phutsaigon.vn/wp-content/uploads/2022/07/tc3jjope-7-1_05.jpg">
+<h3>Sài Gòn xưa</h3>
+</article>
+
+<article class="museum-card"
+ data-category="kien-truc"
+ data-title="KIến trúc ở Hà Nội xưa"
+ data-desc="Bức ảnh là hình ảnh tòa nhà Bảo tàng Lịch sử Quốc gia (trước đây là Bảo tàng Louis Finot), một kiệt tác tiêu biểu cho phong cách kiến trúc Đông Dương tại Hà Nội. Được kiến trúc sư Ernest Hébrard thiết kế vào thập niên 1920, công trình gây ấn tượng mạnh bởi sự kết hợp tinh tế giữa cấu trúc hình khối phương Tây hiện đại và hệ mái chồng diêm, hoa văn trang trí mang đậm bản sắc truyền thống Việt Nam. Với vẻ đẹp uy nghi nhưng không kém phần mềm mại, tòa nhà không chỉ là một di sản kiến trúc quý giá mà còn là biểu tượng lưu giữ những giá trị văn hóa, lịch sử thăng trầm của mảnh đất Thủ đô ngàn năm văn hiến."
+ data-img="https://longvietarch.wordpress.com/wp-content/uploads/2024/10/toa-nha-vien-dong-bac-co.jpg?w=600">
+<img src="https://longvietarch.wordpress.com/wp-content/uploads/2024/10/toa-nha-vien-dong-bac-co.jpg?w=600">
+<h3>KIến trúc ở Hà Nội xưa</h3>
+</article>
+
+<article class="museum-card"
+ data-category="le-hoi"
+ data-title="Giỗ Tổ Hùng Vương"
+ data-desc="Bức ảnh ghi lại lễ hội Đền Hùng cách đây hơn một thế kỉ, như một thước phim sống động về đời sống tinh thần của người Việt xưa. Trước cổng đền cổ kính, dòng người từ khắp nơi quy tụ về trong không khí trang nghiêm, thành kính. Những trang phục truyền thống, nón lá, ô giấy và cờ lễ tạo nên một bức tranh vừa mộc mạc vừa thiêng liêng. Lễ hội không chỉ là dịp tưởng nhớ công lao các Vua Hùng mà còn thể hiện sâu sắc đạo lí “uống nước nhớ nguồn”, gắn kết cộng đồng và nuôi dưỡng ý thức về cội nguồn dân tộc qua nhiều thế hệ."
+ data-img="https://phanduykha.wordpress.com/wp-content/uploads/2011/02/p1030489.jpg">
+<img src="https://phanduykha.wordpress.com/wp-content/uploads/2011/02/p1030489.jpg">
+<h3>Giỗ Tổ Hùng Vương</h3>
+</article>
+
+<article class="museum-card"
+ data-category="le-hoi"
+ data-title="Nhảy sạp"
+ data-desc="Trong không khí rộn ràng của Hội làng Bằng Cả (TP. Hạ Long) dịp đầu xuân 2025, nhảy sạp nổi bật là một hoạt động văn hóa đặc sắc, thu hút đông đảo người dân và du khách cùng tham gia. Đây không chỉ là một trò chơi dân gian thuần túy mà còn là nhịp cầu kết nối cộng đồng, thể hiện sự khéo léo và tinh thần lạc quan của đồng bào người Dao Thanh Y. Giữa không gian lễ hội đậm chất truyền thống, những nhịp sạp gõ đều đặn cùng điệu nhảy uyển chuyển đã góp phần tô điểm thêm vẻ đẹp bản sắc dân tộc, đồng thời tạo nên sức hút du lịch độc đáo cho vùng đất Bằng Cả.."
+ data-img="https://dantocmiennui-media.baotintuc.vn/images/a160d62aec4046cd42c02a12308a7434a9e21a2287dc27b8a319198e0fd141e54ed44a8863916ff17aeaaa16fb054218f1177396b61143340c5cc6298efbd335c266309c363b9c3840cd20c8695fd79ad3258b8b674e8fbd299bf511d352c5717e3f41d0de59ab5120709cd92b6e691b/potal-hoi-lang-bang-ca-le-hoi-truyen-thong-cua-dong-bao-nguoi-dao-thanh-y-7880209.jpg">
+<img src="https://dantocmiennui-media.baotintuc.vn/images/a160d62aec4046cd42c02a12308a7434a9e21a2287dc27b8a319198e0fd141e54ed44a8863916ff17aeaaa16fb054218f1177396b61143340c5cc6298efbd335c266309c363b9c3840cd20c8695fd79ad3258b8b674e8fbd299bf511d352c5717e3f41d0de59ab5120709cd92b6e691b/potal-hoi-lang-bang-ca-le-hoi-truyen-thong-cua-dong-bao-nguoi-dao-thanh-y-7880209.jpg">
+<h3>Nhảy sạp</h3>
+</article>
+
+<article class="museum-card"
+ data-category="hien-vat"
+ data-title="Trống đồng"
+ data-desc="Trống đồng là biểu tượng cho đỉnh cao luyện kim của cư dân cổ đại, với hai trung tâm lớn nhất là Bắc Việt Nam và Vân Nam (Trung Quốc). Theo hệ thống phân loại của F.Heger, trống được chia thành 4 loại chính, trong đó loại I (như trống Ngọc Lũ, Hoàng Hạ) là loại sớm và tinh xảo nhất, đại diện cho văn hóa Đông Sơn rực rỡ. Dù có những khác biệt trong cách phân loại giữa các nhà khảo cổ Việt Nam và Trung Quốc về niên đại hay loại hình (như dòng Vạn Gia Bá), trống đồng vẫn luôn được khẳng định là di vật lịch sử quý giá, phản ánh quyền uy và đời sống tâm linh phong phú của các tộc người khu vực Đông Nam Á."
+ data-img="https://baotanglichsuquocgia.vn/DataFiles/News/Tintuc_cgs_vn_201473013h41m9s.jpg">
+<img src="https://baotanglichsuquocgia.vn/DataFiles/News/Tintuc_cgs_vn_201473013h41m9s.jpg">
+<h3>Trống đồng</h3>
+</article>
+
+<article class="museum-card"
+ data-category="hien-vat"
+ data-title="Mâm đồng"
+ data-desc="Chiếc mâm đồng hiện lưu giữ tại Bảo tàng Lịch sử Quốc gia là hiện vật quý báu, gắn liền với thời kỳ hoạt động cách mạng bí mật của các đồng chí Trường Chinh, Hoàng Văn Thụ và Văn Tiến Dũng tại Bắc Ninh năm 1940. Nằm trong sưu tập hiện vật về Tổng Bí thư Trường Chinh, đây được coi là -cuốn sử sống- minh chứng cho những đóng góp to lớn của ông – một nhà lãnh đạo kiệt xuất, nhà báo và nhà văn hóa xuất sắc. Hiện nay, các hiện vật này đóng vai trò quan trọng trong việc giáo dục truyền thống cách mạng và tôn vinh sự nghiệp của những người cộng sản tiền bối đối với nền độc lập dân tộc."
+ data-img="https://baotanglichsu.vn/DataFiles/2023/10/News/Thumb/20231002-151005-rqK3dOKw.jpg">
+<img src="https://baotanglichsu.vn/DataFiles/2023/10/News/Thumb/20231002-151005-rqK3dOKw.jpg">
+<h3>Mâm đồng</h3>
+</article>
+
+</div>
+</section>
+
+<!-- MODAL -->
+<div class="museum-modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="modal-media"><img></div>
+    <div class="modal-text">
+      <h3></h3>
+      <p></p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* INTRO */
+window.addEventListener('load',()=>{
+  const intro=document.querySelector('.museum-intro');
+  setTimeout(()=>intro.classList.add('open'),500);
+  setTimeout(()=>intro.remove(),2200);
+});
+
+/* FILTER */
+const museum=document.querySelector('.museum');
+document.querySelectorAll('[data-filter-btn]').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('[data-filter-btn]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    museum.dataset.filter=btn.dataset.filterBtn;
+  };
+});
+
+/* CARD APPEAR */
+const cards=document.querySelectorAll('.museum-card');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('show'),i*80);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.2});
+cards.forEach(c=>obs.observe(c));
+
+/* MODAL */
+const modal=document.querySelector('.museum-modal');
+const modalImg=modal.querySelector('img');
+const modalTitle=modal.querySelector('h3');
+const modalDesc=modal.querySelector('p');
+
+cards.forEach(card=>{
+  card.onclick=()=>{
+    modal.classList.add('active');
+    modalImg.src=card.dataset.img;
+    modalTitle.textContent=card.dataset.title;
+    modalDesc.textContent=card.dataset.desc;
+  };
+});
+
+modal.onclick=e=>{
+  if(e.target.classList.contains('museum-modal')||e.target.classList.contains('close')){
+    modal.classList.remove('active');
+  }
+};
+</script>
+<!-- FOOTER -->
+<footer>
+    @DESIGN BY - NGUYỄN THỊ YẾN PHI-
+</footer>
+
+</body>
+</html>
